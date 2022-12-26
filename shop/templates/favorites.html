@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% block body %}
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="#">Home</a>
+                <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                <span class="breadcrumb-item active">Favorite List</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+
+<!-- Shop Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <!-- Shop Sidebar Start -->
+        <!-- Shop Sidebar End -->
+
+        <!-- Shop Product Start -->
+        <div class="col">
+            <div class="row pb-3">
+               <!-- Shop Sidebar-top Start -->
+               {% include 'utils/sidebar-top.html' %}
+               <!-- Shop Sidebar-top end -->
+               {% for product in user.customer.favorite_products.all%}
+                <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                    {% include "utils/product-item.html" with product=product.product %}
+                </div>
+                {% endfor %}
+                <div class="col-12">
+                    {% include "utils/paginator.html" with object=products %}
+                </div>
+            </div>
+        </div>
+        <!-- Shop Product End -->
+    </div>
+</div>
+<!-- Shop End -->
+
+{% endblock body %}
+

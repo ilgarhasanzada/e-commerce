@@ -65,6 +65,7 @@
                                     {% if product.stars > 2 %}<small class="fa fa-star text-primary mr-1"></small> {% endif %}
                                     {% if product.stars > 3 %}<small class="fa fa-star text-primary mr-1"></small> {% endif %}
                                     {% if product.stars > 4 %}<small class="fa fa-star text-primary mr-1"></small> {% endif %}
+                                    {% if not product.stars > 0 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}
                                     {% if not product.stars > 1 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}
                                     {% if not product.stars > 2 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}
                                     {% if not product.stars > 3 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}
@@ -75,49 +76,44 @@
                     </div>
                     <h3 class="font-weight-semi-bold mb-4">${% if product.discount %}{{product.discount}}{% else %}{{product.price}}{% endif %}</h3>
                     <p class="mb-4">{{product.explanation}}</p>
-                    {% if product.variants %}
-                    <div class="d-flex mb-3">
+                    <form method="post" action="{% url 'variant-add-order-list' product.id %}">
+                        {% csrf_token %}
+                        <div class="d-flex mb-3">
                         <strong class="text-dark mr-3">Sizes:</strong>
-                        <form>
-                            {% for variant in product.variants.all %}
-                            {% if variant.size%}
+                            {% for size in product.sizes.all %}
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="size-{{variant.id}}" name="size">
-                                <label class="custom-control-label" for="size-{{variant.id}}">{{variant.size}}</label>
+                                <input type="radio" class="custom-control-input" id="size-{{size.id}}" name="size" value="{{size.id}}">
+                                <label class="custom-control-label" for="size-{{size.id}}">{{size}}</label>
                             </div>
-                            {% endif %}
                             {% endfor %}
-                        </form>
                     </div>
                     <div class="d-flex mb-4">
                         <strong class="text-dark mr-3">Colors:</strong>
-                        <form>
-                            {% for variant in product.variants.all %}
+                            {% for color in product.colors.all %}
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="color-{{variant.color}}" name="color">
-                                <label class="custom-control-label" for="color-{{variant.color}}">{{variant.color|capfirst}}</label>
+                                <input type="radio" class="custom-control-input" id="color-{{color.id}}" name="color" value="{{color.id}}">
+                                <label class="custom-control-label" for="color-{{color.id}}">{{color|capfirst}}</label>
                             </div>
                             {% endfor %}
-                        </form>
                     </div>
-                    {% endif %}
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-minus">
+                                <button type="button" class="btn btn-primary btn-minus">
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                            <input name="count" type="text" class="form-control bg-secondary border-0 text-center" value="1">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-plus">
+                                <button type="button" class="btn btn-primary btn-plus">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                        <button type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart</button>
                     </div>
+                    </form>
                     <div class="d-flex pt-2">
                         <strong class="text-dark mr-2">Share on:</strong>
                         <div class="d-inline-flex">

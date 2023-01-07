@@ -6,6 +6,7 @@ $(function () {
         },
         submitSuccess: function ($form, event) {
             event.preventDefault();
+            var csrf = $("input[name=csrfmiddlewaretoken]").val()
             var name = $("input#name").val();
             var email = $("input#email").val();
             var subject = $("input#subject").val();
@@ -15,13 +16,14 @@ $(function () {
             $this.prop("disabled", true);
 
             $.ajax({
-                url: "contact.php",
+                url: "http://localhost:8000/contact/",
                 type: "POST",
                 data: {
                     name: name,
                     email: email,
                     subject: subject,
-                    message: message
+                    message: message,
+                    csrfmiddlewaretoken: csrf
                 },
                 cache: false,
                 success: function () {

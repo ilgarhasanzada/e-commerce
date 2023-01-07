@@ -1,24 +1,30 @@
-<div class="product-item bg-light mb-4">
+{% load producthelper %}
+
+<div id="product{{product.id}}" class="product-item bg-light mb-4">
     <div class="product-img position-relative overflow-hidden">
         <img class="img-fluid w-100" src={{product.product_images.first.image.url}} alt="">
         <div class="product-action">
-            {% comment %} {{ user.customer.favorite_products.all}} {% endcomment %}         
-            <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-shopping-cart"></i></a>
-            {% for user_product in user.customer.favorite_products.all %}
-                {% if  user_product.product == product %}
-                <a onclick="doLike()"  class="btn btn-outline-danger btn-square" href={% url 'add-favorites' product.id %}><i class="far fa-heart"></i></a>
-                <script>
-                function doLike() {
-                    // document.getElementById("product_selected_{{product.id}}").classList.toggle("d-none")
-                    alert({{product.id}})
-                } 
-            </script>{% endif %}  
-            {% endfor %}  
-            <a id="product_selected_{{product.id}}" class="btn btn-outline-dark btn-square" href={% url 'add-favorites' product.id %}><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-sync-alt"></i></a>
+            {% comment %} {% for item in user.customer.orders.last.order_items.all%}
+                {% if item.variant.product == product and item.variant.size == None and item.variant.color == None %}
+                <a class="btn btn-dark btn-square" href="{% url 'add-order-list' product.id %}"><i class="fa fa-shopping-cart"></i></a>
+                {% endif %}
+            {% endfor %}{% endcomment %}
+            {% comment %} <a id="order_item{{product.id}}" class="btn btn-outline-dark btn-square" href="{% url 'add-order-list' product.id %}"><i class="fa fa-shopping-cart"></i></a>  {% endcomment %}
+            <a class="btn {% if product|is_wished:request and request.user.is_authenticated %} btn-dark {% else %} btn-outline-dark  {% endif %} btn-square" href={% url 'add-favorites' product.id %}><i class="far fa-heart"></i></a>
+
+            {% comment %} <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-sync-alt"></i></a> {% endcomment %}
             <a class="btn btn-outline-dark btn-square" href={{product.get_absolute_url}}><i class="fa fa-search"></i></a>
         </div>
+         
     </div>
+     {% comment %} {% for item in user.customer.orders.last.order_items.all%}
+        {% if item.variant.product == product and item.variant.size == None and item.variant.color == None %}
+        <script>
+            document.getElementById("order_item"+{{product.id}}).remove()
+        </script> 
+        {% endif %}
+    {% endfor %}   {% endcomment %}
+
     <div class="text-center py-4">
         <a class="h6 text-decoration-none text-truncate" href="{{product.get_absolute_url}}">{{product.title}}</a>
         <div class="d-flex align-items-center justify-content-center mt-2">
@@ -45,6 +51,7 @@
                 {% if product.stars > 2 %}<small class="fa fa-star text-primary mr-1"></small> {% endif %}
                 {% if product.stars > 3 %}<small class="fa fa-star text-primary mr-1"></small> {% endif %}
                 {% if product.stars > 4 %}<small class="fa fa-star text-primary mr-1"></small> {% endif %}
+                {% if not product.stars > 0 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}
                 {% if not product.stars > 1 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}
                 {% if not product.stars > 2 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}
                 {% if not product.stars > 3 %}<small class="far fa-star text-primary mr-1"></small> {% endif %}

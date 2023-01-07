@@ -33,7 +33,7 @@
                 </div>
                 {% endfor %}
                 <div class="col-12">
-                    {% include "utils/paginator.html" with object=products %}
+                    {% include "utils/paginator.html" with object=user.customer.favorite_products.all %}
                 </div>
             </div>
         </div>

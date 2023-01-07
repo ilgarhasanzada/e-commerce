@@ -11,11 +11,15 @@
         <div class="col-lg-6 text-center text-lg-right">
             <div class="d-inline-flex align-items-center">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                    {% if user.is_authenticated %}
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{user}}</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">Sign in</button>
-                        <button class="dropdown-item" type="button">Sign up</button>
+                        <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
+                    {% else %}
+                    <a href={% url 'login' %} class="dropdown-item" type="button">Sign in</a>
+                    <button class="dropdown-item" type="button">Sign up</button>
+                    {% endif %}
                 </div>
                 <div class="btn-group mx-2">
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
